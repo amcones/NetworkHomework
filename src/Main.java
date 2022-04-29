@@ -1,60 +1,82 @@
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.io.InputStream;
 import java.util.concurrent.Executors;
+import java.util.Vector;
 
 public class Main {
-
-    public static void main(String[] args) throws IOException {
-        ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
-	    ServerSocket serverSocket=new ServerSocket(6666);
-        System.out.println("服务器启动");
-        while(true)
-        {
-            System.out.println("线程id="+Thread.currentThread().getId()+",名字="+Thread.currentThread().getName());
-            System.out.println("等待连接");
-            final Socket socket= serverSocket.accept();
-            System.out.println("连接到一个客户端");
-            //新建一个线程
-            newCachedThreadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    handler(socket);
-                }
-            });
+    public static void main(String[] args){
+        new ServerListener().start();
+    }
+}
+class ServerListener extends Thread{
+    public void run(){
+        try{
+            ServerSocket serverSocket= new ServerSocket(6666);
+            while(true){
+                Socket socket=serverSocket.accept();
+                System.out.println("有客户端连接");
+                ChatSocket cs=new ChatSocket(socket);
+                cs.start();
+                ChatManager.getChatManager().add(cs);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
-    public static void handler(Socket socket)
+}
+class ChatSocket extends Thread
+{
+    Socket socket;
+    public ChatSocket(Socket socket){
+        this.socket=socket;
+    }
+    public void out(String msg)
     {
         try{
-            System.out.println("线程id="+Thread.currentThread().getId()+",名字="+Thread.currentThread().getName());
-            byte[] inputBuffer=new byte[65535];
-            InputStream inputStream=socket.getInputStream();
-            while(true)
-            {
-                System.out.println("线程id="+Thread.currentThread().getId()+",名字="+Thread.currentThread().getName());
-                System.out.println("读取客户端输入");
-                int len=inputStream.read(inputBuffer);
-                if(len!=-1){
-                    System.out.println(new String(inputBuffer,0,len));
-                }
-                else{
-                    break;
-                }
-            }
-        }catch(Exception e)
-        {
+            socket.getOutputStream().write(msg.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            System.out.println("关闭和客户端连接");
-            try{
-                socket.close();
-            }catch(Exception e){
-                e.printStackTrace();
+        }
+    }
+    public void run(){
+        try{
+            BufferedReader br=new BufferedReader(
+                    new InputStreamReader(
+                            socket.getInputStream(),"UTF-8"
+                    )
+            );
+            String line=null;
+            while((line=br.readLine())!=null){
+                System.out.println(line);
+                ChatManager.getChatManager().publish(this,line);
             }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+class ChatManager
+{
+    private ChatManager(){}
+    private static final ChatManager chatManager=new ChatManager();
+    public static ChatManager getChatManager(){
+        return chatManager;
+    }
+    Vector<ChatSocket> vector = new Vector<ChatSocket>();
+    public void add(ChatSocket chatSocket)
+    {
+        vector.add(chatSocket);
+    }
+
+    public void publish(ChatSocket socket,String msg){
+        for(int i=0;i<vector.size();i++){
+            ChatSocket chatSocket=vector.get(i);
+            chatSocket.out(msg);
         }
     }
 }
