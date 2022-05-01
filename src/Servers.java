@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class Servers {
+    String msg="";
+    protected static List<String> info=new Vector<>();
     //将接收到的socket变成一个集合
     protected static   List<Socket> sockets = new Vector<>();
 
