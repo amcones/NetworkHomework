@@ -1,0 +1,15 @@
+D:\WebHomework\WebHomework\WebHomework\bin\Release\WebHomework.exe.config
+D:\WebHomework\WebHomework\WebHomework\bin\Release\WebHomework.exe
+D:\WebHomework\WebHomework\WebHomework\bin\Release\WebHomework.pdb
+D:\WebHomework\WebHomework\WebHomework\obj\Release\MainWindow.g.cs
+D:\WebHomework\WebHomework\WebHomework\obj\Release\App.g.cs
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework_MarkupCompile.cache
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework_MarkupCompile.lref
+D:\WebHomework\WebHomework\WebHomework\obj\Release\MainWindow.baml
+D:\WebHomework\WebHomework\WebHomework\obj\Release\Resources\icons.baml
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework.g.resources
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework.Properties.Resources.resources
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework.csproj.GenerateResource.cache
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework.csproj.CoreCompileInputs.cache
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework.exe
+D:\WebHomework\WebHomework\WebHomework\obj\Release\WebHomework.pdb
